@@ -1,20 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { api } from './services/api'
 
+const fallback = { vehicle: { id: 'vehicle-245', vehicleId: 'TRUCK #245', health: 42 }, risk: 'IMMEDIATE', fault: 'Battery voltage instability', metrics: { temperature: 91, batteryVoltage: 11.4, fuel: 68 } }
 export default function DriverPortal({ onNotice }) {
-  const [checkedIn, setCheckedIn] = useState(false)
-  const [dvir, setDvir] = useState(false)
-  const [sos, setSos] = useState(false)
-  const [message, setMessage] = useState('')
-  const toggleShift = async () => {
-    try { await (checkedIn ? api.driverCheckOut() : api.driverCheckIn()) } catch {}
-    setCheckedIn(!checkedIn)
-    const text = checkedIn ? 'Driver check-out recorded.' : 'Driver check-in recorded · TRUCK #245 is active.'
-    setMessage(text); onNotice(text)
-  }
-  const submitDvir = async (event) => { event.preventDefault(); try { await api.dvir('vehicle-245') } catch {}; setDvir(false); setMessage('DVIR submitted to fleet operations.'); onNotice('Driver vehicle inspection report submitted.') }
-  const sendSos = async () => { try { await api.sos('vehicle-245') } catch {}; setSos(false); setMessage('SOS sent. Fleet operations has been notified.'); onNotice('SOS dispatched to fleet operations.') }
-  return <div className="driver"><div className="driverTop"><span>TRUCK #245</span><b>{checkedIn ? 'ON DUTY' : '08:42 AM'}</b></div><section className="driveralert"><span>IMMEDIATE RISK</span><h1>Engine electrical system needs attention</h1><p>Battery voltage unstable · Nearest garage: 4 km</p><button onClick={() => setMessage('Alert acknowledged. Continue safely to the nearest garage.')}>Acknowledge alert</button></section><div className="health"><p>VEHICLE HEALTH</p><h1>42<span>%</span></h1><div className="bar"><i/></div><p>Service recommended before next route.</p></div><div className="driverstats"><Stat n="91°C" l="Engine temp" d="Normal"/><Stat n="11.4V" l="Battery" d="Low" red/><Stat n="68%" l="Fuel" d="214 km range"/></div>{message && <p className="driver-message" role="status">{message}</p>}<div className="quick"><button onClick={toggleShift}><span>{checkedIn ? 'Check out' : 'Check in'}</span></button><button onClick={() => setDvir(true)}><span>Quick DVIR</span></button><button className="sos" onClick={() => setSos(true)}>SOS<span>Emergency</span></button></div>{dvir && <div className="driver-modal"><form onSubmit={submitDvir}><h2>Quick DVIR</h2><p>Is the vehicle safe to operate?</p><label><input required type="radio" name="safe" value="yes"/> Yes, with noted issue</label><label><input required type="radio" name="safe" value="no"/> No, remove from service</label><textarea placeholder="Optional inspection note"/><button className="primary">Submit DVIR</button><button type="button" onClick={() => setDvir(false)}>Cancel</button></form></div>}{sos && <div className="driver-modal"><section><h2>Send emergency SOS?</h2><p>This immediately alerts fleet operations with your vehicle location.</p><button className="danger" onClick={sendSos}>Send SOS now</button><button onClick={() => setSos(false)}>Cancel</button></section></div>}</div>
+  const [data, setData] = useState(fallback), [checkedIn, setCheckedIn] = useState(false), [message, setMessage] = useState('')
+  useEffect(() => { api.driverVehicle().then(setData).catch(() => {}) }, [])
+  const toggleShift = async () => { try { await (checkedIn ? api.driverCheckOut() : api.driverCheckIn()) } catch {}; const next = !checkedIn; setCheckedIn(next); setMessage(next ? 'Driver check-in recorded.' : 'Driver check-out recorded.'); onNotice(next ? 'Driver check-in recorded.' : 'Driver check-out recorded.') }
+  const submitDvir = async () => { try { await api.dvir(data.vehicle.id) } catch {}; setMessage('DVIR submitted to fleet operations.'); onNotice('Driver vehicle inspection report submitted.') }
+  const sendSos = async () => { try { await api.sos(data.vehicle.id) } catch {}; setMessage('SOS sent. Fleet operations has been notified.'); onNotice('SOS dispatched to fleet operations.') }
+  const risk = data.risk === 'IMMEDIATE'
+  return <div className="driver"><div className="driverTop"><span>{data.vehicle.vehicleId}</span><b>{checkedIn ? 'ON DUTY' : 'READY FOR CHECK-IN'}</b></div>{risk && <section className="driveralert"><span>IMMEDIATE RISK</span><h1>{data.fault || 'Vehicle needs immediate attention'}</h1><p>Nearest garage: 4 km · Follow fleet safety guidance.</p><button onClick={() => setMessage('Alert acknowledged. Continue safely to the nearest garage.')}>Acknowledge alert</button></section>}<div className="health"><p>VEHICLE HEALTH</p><h1>{data.vehicle.health}<span>%</span></h1><div className="bar"><i style={{ width: `${data.vehicle.health}%`, background: risk ? '#ef4444' : '#22c55e' }}/></div><p>{risk ? 'Service recommended before next route.' : 'Vehicle is healthy for the assigned route.'}</p></div><div className="driverstats"><Stat n={`${data.metrics.temperature}°C`} l="Engine temp" d="Live telemetry"/><Stat n={`${data.metrics.batteryVoltage}V`} l="Battery" d={risk ? 'Low' : 'Normal'} red={risk}/><Stat n={`${data.metrics.fuel}%`} l="Fuel" d="Live range estimate"/></div>{message && <p className="driver-message" role="status">{message}</p>}<div className="quick"><button onClick={toggleShift}><span>{checkedIn ? 'Check out' : 'Check in'}</span></button><button onClick={submitDvir}><span>Quick DVIR</span></button><button className="sos" onClick={sendSos}>SOS<span>Emergency</span></button></div></div>
 }
-
 function Stat({ n, l, d, red }) { return <section className="metric"><div><span>{l}</span><h2 className={red ? 'redtext' : ''}>{n}</h2></div><small className={red ? 'redtext' : ''}>{d}</small></section> }
