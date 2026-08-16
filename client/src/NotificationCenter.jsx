@@ -1,0 +1,4 @@
+import { useEffect, useState } from 'react'
+import { api } from './services/api'
+
+export default function NotificationCenter({ latest }){const [open,setOpen]=useState(false),[items,setItems]=useState([]);useEffect(()=>{api.notifications().then(setItems).catch(()=>{})},[]);useEffect(()=>{if(!latest)return;setItems(items=>[{id:`live-${Date.now()}`,message:latest,timestamp:new Date().toISOString()},...items].slice(0,12))},[latest]);return <div className="notices"><button className="notice-button" aria-label="Notifications" onClick={()=>setOpen(!open)}>♢{items.length>0&&<i>{items.length}</i>}</button>{open&&<section className="notice-popover"><header><b>Notifications</b><button onClick={()=>setItems([])}>Clear</button></header>{items.length?items.map(item=><article key={item.id}><b>{item.message}</b><small>{new Date(item.timestamp).toLocaleTimeString()}</small></article>):<p>No new notifications.</p>}</section>}</div>}

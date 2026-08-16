@@ -1,0 +1,22 @@
+services:
+  api:
+    build: ./server
+    environment:
+      PORT: 5000
+      CLIENT_URL: http://localhost:8080
+      JWT_SECRET: ${JWT_SECRET:-replace-in-production}
+      MONGO_URI: ${MONGO_URI:-}
+      AI_API_KEY: ${AI_API_KEY:-}
+      REPAIR_STORAGE_PATH: /app/uploads
+    ports:
+      - "5000:5000"
+    volumes:
+      - repair_uploads:/app/uploads
+  client:
+    build: ./client
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+volumes:
+  repair_uploads:
