@@ -75,6 +75,8 @@ All accounts use `Demo@123`.
 
 Every protected endpoint verifies the JWT role and organization boundary. The ticket lifecycle permits only `ASSIGNED → IN_PROGRESS → COMPLETED`.
 
+Additional resource endpoints: `GET /api/auth/me`; `POST`, `PATCH`, and `GET /api/vehicles/:id`; `POST /api/sensors/telemetry`, `GET /api/sensors/:vehicleId/latest`, and `/history`; `POST /api/predictions/analyze`, `GET /api/predictions`, and `/api/predictions/:vehicleId`; `GET /api/tickets/:id`; `GET /api/tasks/my`; `PATCH /api/notifications/:id/read`; and the owner reports `GET /api/analytics/fleet`, `/repairs`, and `/downtime`.
+
 ## Environment variables
 
 | Variable | Required | Purpose |
