@@ -1,18 +1,5 @@
-import mongoose from 'mongoose';
-const {Schema,model,models}=mongoose;
-const scoped={organizationId:{type:Schema.Types.ObjectId,ref:'Organization',required:true,index:true}};
-export const Organization=models.Organization||model('Organization',new Schema({name:{type:String,required:true},type:String,location:String,fleetSize:Number},{timestamps:true}));
-export const User=models.User||model('User',new Schema({...scoped,name:{type:String,required:true},email:{type:String,unique:true,required:true,index:true},passwordHash:{type:String,required:true},role:{type:String,enum:['OWNER','DRIVER','WORKER'],required:true},active:{type:Boolean,default:true},profile:Schema.Types.Mixed},{timestamps:true}));
-export const Owner=models.Owner||model('Owner',new Schema({...scoped,userId:{type:Schema.Types.ObjectId,ref:'User',required:true,unique:true},organizationName:String,organizationType:String,fleetSize:Number,location:String},{timestamps:true}));
-export const Driver=models.Driver||model('Driver',new Schema({...scoped,userId:{type:Schema.Types.ObjectId,ref:'User',required:true,unique:true},employeeId:String,licenseNumber:String,licenseExpiry:Date,vehicleId:{type:Schema.Types.ObjectId,ref:'Vehicle'},registrationNumber:String},{timestamps:true}));
-export const Worker=models.Worker||model('Worker',new Schema({...scoped,userId:{type:Schema.Types.ObjectId,ref:'User',required:true,unique:true},employeeId:String,specialization:String,experience:Number,workshop:String,status:{type:String,enum:['AVAILABLE','BUSY','OFFLINE'],default:'OFFLINE'}},{timestamps:true}));
-export const Vehicle=models.Vehicle||model('Vehicle',new Schema({...scoped,vehicleId:{type:String,required:true},driverId:{type:Schema.Types.ObjectId,ref:'User'},status:String,health:Number,location:Schema.Types.Mixed},{timestamps:true}));
-export const SensorReading=models.SensorReading||model('SensorReading',new Schema({...scoped,vehicleId:{type:Schema.Types.ObjectId,ref:'Vehicle',index:true},metrics:Schema.Types.Mixed},{timestamps:true}));
-export const Prediction=models.Prediction||model('Prediction',new Schema({...scoped,vehicleId:{type:Schema.Types.ObjectId,ref:'Vehicle'},fault:String,risk:{type:String,enum:['IMMEDIATE','SHORT-TERM','LONG-TERM']},rootCause:String,confidence:Number},{timestamps:true}));
-export const RepairTicket=models.RepairTicket||model('RepairTicket',new Schema({...scoped,vehicleId:{type:Schema.Types.ObjectId,ref:'Vehicle'},fault:String,risk:String,rootCause:String,confidence:Number,status:{type:String,enum:['ASSIGNED','IN_PROGRESS','COMPLETED'],default:'ASSIGNED'},workerId:{type:Schema.Types.ObjectId,ref:'User'},deadline:Date,notes:String},{timestamps:true}));
-export const MaintenanceRecord=models.MaintenanceRecord||model('MaintenanceRecord',new Schema({...scoped,vehicleId:{type:Schema.Types.ObjectId,ref:'Vehicle'},ticketId:{type:Schema.Types.ObjectId,ref:'RepairTicket'},workerId:{type:Schema.Types.ObjectId,ref:'User'},notes:String,proofUrl:String},{timestamps:true}));
-export const Notification=models.Notification||model('Notification',new Schema({...scoped,userId:{type:Schema.Types.ObjectId,ref:'User'},message:String,read:{type:Boolean,default:false}},{timestamps:true}));
-export const ARProcedure=models.ARProcedure||model('ARProcedure',new Schema({fault:String,steps:[String],modelUrl:String},{timestamps:true}));
-export const TrainingModule=models.TrainingModule||model('TrainingModule',new Schema({title:{type:String,required:true},fault:String,description:String,steps:[String],durationMinutes:Number},{timestamps:true}));
-export const VRScenario=models.VRScenario||model('VRScenario',new Schema({trainingModuleId:{type:Schema.Types.ObjectId,ref:'TrainingModule'},title:String,sceneUrl:String,requiredCapabilities:[String],fallbackInstructions:[String]},{timestamps:true}));
-export const AuditLog=models.AuditLog||model('AuditLog',new Schema({...scoped,userId:{type:Schema.Types.ObjectId,ref:'User'},action:String,entity:String,entityId:String},{timestamps:{createdAt:true,updatedAt:false}}));
+export * from './models/core.models.js'
+export * from './models/people.models.js'
+export * from './models/fleet.models.js'
+export * from './models/operations.models.js'
+export * from './models/immersive.models.js'

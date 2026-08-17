@@ -130,6 +130,7 @@ export function createApplicationContext({ io, jwtSecret }) {
     return n;
   };
   const auth = createAuth(jwtSecret);
+  const authLimiter = rateLimit({ windowMs: 60_000, max: 10 });
   const paged = (rows, query = {}) => {
     const page = Math.max(1, Number(query.page) || 1),
       limit = Math.min(100, Math.max(1, Number(query.limit) || 20)),
