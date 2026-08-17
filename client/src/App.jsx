@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import './App.css'; import './auth.css'; import './map.css'; import './analytics.css'; import './driver.css'; import './owner.css'; import './overrides.css'; import './notifications.css'; import './voice.css'; import './proof.css'; import './premium.css'
+import './typography.css'
 import { api } from './services/api'
 import { connectRealtime } from './services/socket'
 import { flushOfflineQueue } from './services/offlineQueue'
