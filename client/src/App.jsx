@@ -4,14 +4,14 @@ import './App.css'; import './auth.css'; import './map.css'; import './analytics
 import { api } from './services/api'
 import { connectRealtime } from './services/socket'
 import { flushOfflineQueue } from './services/offlineQueue'
-import AuthPortal from './AuthPortal'
-import OwnerPortal from './OwnerPortal'
-import DriverPortal from './DriverPortal'
-import WorkerPortal from './WorkerPortal'
+import AuthPortal from './features/auth/AuthPortal'
+import OwnerPortal from './features/owner/OwnerPortal'
+import DriverPortal from './features/driver/DriverPortal'
+import WorkerPortal from './features/worker/WorkerPortal'
 import NotificationCenter from './NotificationCenter'
 import ProtectedRoute from './routes/ProtectedRoute'
 
-const FleetMap = lazy(() => import('./FleetMap'))
+const FleetMap = lazy(() => import('./features/fleet/FleetMap'))
 const AnalyticsPanel = lazy(() => import('./AnalyticsPanel'))
 const TrainingPage = lazy(() => import('./features/worker/TrainingPage'))
 const fallbackTickets = [{ id: 'UT-2048', vehicle: 'TRUCK #245', fault: 'Battery Voltage Instability', risk: 'IMMEDIATE', rootCause: 'Alternator regulator fluctuation', status: 'ASSIGNED', deadline: '2026-08-15T15:00:00Z' }, { id: 'UT-2047', vehicle: 'TRUCK #302', fault: 'Wiring Fault', risk: 'IMMEDIATE', rootCause: 'Damaged harness insulation', status: 'IN_PROGRESS', deadline: '2026-08-15T13:30:00Z' }, { id: 'UT-2043', vehicle: 'TRUCK #118', fault: 'Brake Pad Wear', risk: 'SHORT-TERM', rootCause: 'Pad thickness below threshold', status: 'ASSIGNED', deadline: '2026-08-16T10:00:00Z' }]

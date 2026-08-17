@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { api } from './services/api'
+import { api } from '../../services/api'
 
 const fallback = { vehicle: { id: 'vehicle-245', vehicleId: 'TRUCK #245', health: 42 }, risk: 'IMMEDIATE', fault: 'Battery voltage instability', metrics: { temperature: 91, batteryVoltage: 11.4, fuel: 68, oilPressure: 31, rpm: 2100, tirePressure: 34, speed: 52, fuelEfficiency: 8.4, collisionProximity: 'Clear', ecoSuggestion: 'Maintain steady speed' } }
 export default function DriverPortal({ onNotice }) {

@@ -1,10 +1,10 @@
 import { lazy, Suspense, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { api } from './services/api'
-import { queueAction } from './services/offlineQueue'
+import { api } from '../../services/api'
+import { queueAction } from '../../services/offlineQueue'
 
 const defaultSteps = ['Secure vehicle and isolate power', 'Inspect battery terminals and ground cable', 'Measure alternator output (13.8–14.7 V)', 'Replace the failed component and verify charging']
-const ARRepairGuide = lazy(() => import('./features/ar/ARRepairGuide'))
+const ARRepairGuide = lazy(() => import('../ar/ARRepairGuide'))
 
 export default function WorkerPortal({ tickets = [], onNotice, onTicketUpdated }) {
   const navigate = useNavigate()
@@ -47,7 +47,7 @@ export default function WorkerPortal({ tickets = [], onNotice, onTicketUpdated }
     } catch { setAi('Inspect terminal corrosion, ground continuity, and alternator output before replacing components. Use a multimeter and isolate power before disconnecting wiring.') } finally { setBusy(false) }
   }
 
-  const loadAr = async () => { if (!task) return; try { setAr(await api.arProcedure(task.fault || task.issue)) } catch { setAr({ mode: 'fallback', steps: defaultSteps }) } }
+  const loadAr = async () => { if (!task) return; try { setAr(await api.arProcedureForTicket(task.id)) } catch { setAr({ mode: 'fallback', steps: defaultSteps }) } }
 
   const upload = (event) => {
     const file = event.target.files?.[0]

@@ -79,6 +79,7 @@ export function createAnalyticsController(context) {
       });
     },
     getAnalyticsReport: async (req, res, next) => {
+      if (!req.params.report) req.params.report = req.path.split("/").pop();
       if (!["fleet", "repairs", "downtime"].includes(req.params.report))
         return next();
       const fleet = context.mongoEnabled

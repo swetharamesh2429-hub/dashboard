@@ -8,6 +8,8 @@ export default function createTicketsRoutes(context) {
   router.get("/tickets", auth(), controller.getTickets);
   router.get("/tickets/:id", auth(), controller.getTicketsId);
   router.get("/tasks/my", auth(["WORKER"]), controller.getTasksMy);
+  router.get("/tasks/:id", auth(["WORKER"]), controller.getTicketsId);
+  router.patch("/tasks/:id/status", auth(["WORKER"]), controller.postTicketsIdStatus);
   router.post(
     "/tickets/:id/assign",
     auth(["OWNER"]),

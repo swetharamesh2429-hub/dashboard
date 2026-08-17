@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { api } from './services/api'
+import { api } from '../../services/api'
 
 const demo = { OWNER: ['owner@utap.demo', 'Ananya Kapoor'], WORKER: ['worker@utap.demo', 'Asha Nair'], DRIVER: ['driver@utap.demo', 'Arjun Mehta'] }
 const detailFields = { OWNER: [['organizationName', 'Organization name'], ['organizationType', 'Organization type'], ['fleetSize', 'Fleet size'], ['location', 'Location']], DRIVER: [['organizationId', 'Organization ID'], ['employeeId', 'Employee ID'], ['licenseNumber', 'Driver license number'], ['licenseExpiry', 'License expiry'], ['vehicleId', 'Vehicle ID'], ['registrationNumber', 'Registration number']], WORKER: [['organizationId', 'Organization ID'], ['employeeId', 'Employee ID'], ['specialization', 'Specialization'], ['experience', 'Experience'], ['workshop', 'Workshop / location']] }

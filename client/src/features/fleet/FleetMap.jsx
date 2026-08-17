@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CircleMarker, MapContainer, Popup, TileLayer, Tooltip, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
-import { api } from './services/api'
+import { api } from '../../services/api'
 
 const fallback = ['245', '118', '302', '091', '411', '633', '277', '510', '709', '830', '904', '125'].map((number, index) => ({ id: `vehicle-${number}`, vehicleId: `TRUCK #${number}`, health: index === 0 ? 42 : index === 2 ? 38 : 68 + index * 2, status: index === 0 ? 'IN_GARAGE' : index === 2 ? 'REPAIRING' : 'ON_ROAD', location: { lat: 13.055 + index * 0.009, lng: 80.205 + (index % 4) * 0.018 } }))
 const colour = (health) => health < 60 ? '#ef4444' : health < 80 ? '#f59e0b' : '#22c55e'

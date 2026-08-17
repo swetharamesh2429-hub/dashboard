@@ -6,5 +6,7 @@ export default function createWorkersRoutes(context) {
   const controller = createWorkersController(context);
   const { auth, authLimiter } = context;
   router.get("/workers", auth(["OWNER"]), controller.getWorkers);
+  router.get("/workers/:id", auth(["OWNER"]), controller.getWorkersId);
+  router.patch("/workers/:id/status", auth(["OWNER"]), controller.patchWorkersIdStatus);
   return router;
 }

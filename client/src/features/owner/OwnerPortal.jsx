@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
-import KanbanBoard from './features/tickets/KanbanBoard'
-import MaintenancePage from './features/maintenance/MaintenancePage'
-import OwnerAnalyticsPage from './features/analytics/OwnerAnalyticsPage'
+import KanbanBoard from '../tickets/KanbanBoard'
+import MaintenancePage from '../maintenance/MaintenancePage'
+import OwnerAnalyticsPage from '../analytics/OwnerAnalyticsPage'
 
 const nav = ['Dashboard', 'Fleet', 'Vehicles', 'Workers', 'Repair Tickets', 'Maintenance', 'Alerts', 'Analytics', 'Settings']
 

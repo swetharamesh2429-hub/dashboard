@@ -6,9 +6,14 @@ export default function createArRoutes(context) {
   const controller = createArController(context);
   const { auth, authLimiter } = context;
   router.get(
-    "/ar/procedures/:fault",
+    "/ar/procedures/fault/:fault",
     auth(["WORKER"]),
     controller.getArProceduresFault,
+  );
+  router.get(
+    "/ar/procedures/:ticketId",
+    auth(["WORKER"]),
+    controller.getArProcedureTicket,
   );
   return router;
 }
